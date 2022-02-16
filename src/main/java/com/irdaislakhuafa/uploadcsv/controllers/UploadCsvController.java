@@ -13,6 +13,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,15 +83,19 @@ public class UploadCsvController {
 
                 String message = "Berhasil menyimpan file \"" + fileCsv.getOriginalFilename() + "\"";
                 System.out.println(message);
-                model.addAttribute("success", message);
+                redirectAttributes.addFlashAttribute("success", message);
             } else {
                 redirectAttributes.addFlashAttribute("errorNotCsv", "maaf file yang anda upload bukan CSV!");
             }
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("warningMessage",
+                    "data dari file \"" + fileCsv.getOriginalFilename() + "\" sudah ada!");
         } catch (Exception e) {
             // System.out.println("\033\143");
             redirectAttributes.addFlashAttribute("errorParseCsvMessage",
                     "terjadi kesalahan saat memproses file \"" + fileCsv.getOriginalFilename() + "\"");
             System.out.println("terjadi kesalahan saat memproses file \"" + fileCsv.getOriginalFilename() + "\"");
+            e.printStackTrace();
         }
         return "redirect:/";
     }

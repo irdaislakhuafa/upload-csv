@@ -66,6 +66,11 @@
             color: lightgreen;
             text-transform: capitalize;
         }
+
+        .warning {
+            color: rgba(255, 171, 14, 0.856);
+            text-transform: capitalize;
+        }
     </style>
 </head>
 
@@ -73,10 +78,11 @@
     <div class="container title">
         <h1 class="text-center">Demo Upload CSV</h1>
         <div class="text-center">with OpenCSV</div>
-        <div class="text-center">
+        <div class="text-center" id="messages">
             <small class="error" th:text="${errorParseCsvMessage}"></small>
             <small class="error" th:text="${errorNotCsv}"></small>
-            <small class="success" th:text="${message}"></small>
+            <small class="success" th:text="${success}"></small>
+            <small class="warning" th:text="${warningMessage}"></small>
         </div>
         <hr class="line">
         <div class="text-center">
@@ -86,6 +92,12 @@
             </form>
         </div>
     </div>
+    <script>
+        let messages = document.getElementById("messages");
+        setTimeout(() => {
+            messages.remove();
+        }, 10 * 1000);
+    </script>
 </body>
 
 </html>
