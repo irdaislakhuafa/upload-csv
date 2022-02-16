@@ -52,32 +52,40 @@ public class UploadCsvController {
                                 // get input stream from fileCsv
                                 fileCsv.getInputStream()))) {
 
-            System.out.println("\033\143");
-            System.out.println(fileCsv.getOriginalFilename() + " => " + fileCsv.getContentType());
+            // if file is csv
+            if (fileCsv.getContentType().equalsIgnoreCase("text/csv")) {
+                CsvToBean<User> userBean = new CsvToBeanBuilder<User>(fileCsvReader)
+                        // with type of class
+                        .withType(User.class)
 
-            CsvToBean<User> userBean = new CsvToBeanBuilder<User>(fileCsvReader)
-                    // with type of class
-                    .withType(User.class)
+                        // ignore leading with space(abaikan depan dengan spasi)
+                        .withIgnoreLeadingWhiteSpace(true)
 
-                    // ignore leading with space(abaikan depan dengan spasi)
-                    .withIgnoreLeadingWhiteSpace(true)
+                        // disable default throw exception
+                        .withThrowExceptions(true)
 
-                    // disable default throw exception
-                    .withThrowExceptions(false)
+                        // build object
+                        .build();
 
-                    // build object
-                    .build();
+                // parse userBean to List<>
+                List<User> tempUsers = userBean.parse();
 
-            // parse userBean to List<>
-            List<User> tempUsers = userBean.parse();
+                // hash set to remove duplicate
+                Set<User> users = new HashSet<>();
 
-            // hash set to remove duplicate
-            Set<User> users = new HashSet<>();
+                // input list to set
+                tempUsers.forEach((value) -> users.add(value));
 
-            // input list to set
-            tempUsers.forEach(users::add);
+                System.out.println(users);
+                // save data
+                userService.saveAll(users);
 
-            userService.saveAll(users);
+                String message = "Berhasil menyimpan file \"" + fileCsv.getOriginalFilename() + "\"";
+                System.out.println(message);
+                model.addAttribute("success", message);
+            } else {
+                redirectAttributes.addFlashAttribute("errorNotCsv", "maaf file yang anda upload bukan CSV!");
+            }
         } catch (Exception e) {
             // System.out.println("\033\143");
             redirectAttributes.addFlashAttribute("errorParseCsvMessage",

@@ -56,6 +56,16 @@
             border: none;
             border-radius: 15px;
         }
+
+        .error {
+            color: red;
+            text-transform: capitalize;
+        }
+
+        .success {
+            color: lightgreen;
+            text-transform: capitalize;
+        }
     </style>
 </head>
 
@@ -63,6 +73,11 @@
     <div class="container title">
         <h1 class="text-center">Demo Upload CSV</h1>
         <div class="text-center">with OpenCSV</div>
+        <div class="text-center">
+            <small class="error" th:text="${errorParseCsvMessage}"></small>
+            <small class="error" th:text="${errorNotCsv}"></small>
+            <small class="success" th:text="${message}"></small>
+        </div>
         <hr class="line">
         <div class="text-center">
             <form th:action="@{/upload/csv}" method="post" enctype="multipart/form-data">
