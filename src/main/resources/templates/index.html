@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}"></title>
+
+    <!-- style -->
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            padding-left: var(--bs-gutter-x, 0.75rem);
+            padding-right: var(--bs-gutter-x, 0.75rem);
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .title {
+            padding-top: 2%;
+        }
+
+        .line {
+            width: 30%;
+        }
+
+        .center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        small,
+        .small {
+            font-size: 0.875em;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            padding: 7px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border: none;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container title">
+        <h1 class="text-center">Demo Upload CSV</h1>
+        <div class="text-center">with OpenCSV</div>
+        <hr class="line">
+        <div class="text-center">
+            <form th:action="@{/upload/csv}" method="post">
+                <input type="file" name="file" id="file" required placeholder="Pilih file csv">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
