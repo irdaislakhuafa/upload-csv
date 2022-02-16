@@ -1,7 +1,16 @@
 package com.irdaislakhuafa.uploadcsv.controllers;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.irdaislakhuafa.uploadcsv.entities.User;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +35,45 @@ public class UploadCsvController {
     // @Async
     @PostMapping("/upload/csv")
     public String uploadCsv(Model model, @RequestParam(value = "file") MultipartFile fileCsv) {
-        try {
+        try (
+                // create object buffered reader
+                Reader fileCsvReader = new BufferedReader(
+                        // create input stream reader
+                        new InputStreamReader(
+                                // get input stream from fileCsv
+                                fileCsv.getInputStream()))) {
+
+            System.out.println("\033\143");
             System.out.println(fileCsv.getOriginalFilename() + " => " + fileCsv.getContentType());
+
+            CsvToBean<User> userBean = new CsvToBeanBuilder<User>(fileCsvReader)
+                    // with type of class
+                    .withType(User.class)
+
+                    // ignore leading with space(abaikan depan dengan spasi)
+                    .withIgnoreLeadingWhiteSpace(true)
+
+                    // disable default throw exception
+                    .withThrowExceptions(false)
+
+                    // build object
+                    .build();
+
+            // parse userBean to List<>
+            List<User> tempUsers = userBean.parse();
+
+            // hash set to remove duplicate
+            Set<User> users = new HashSet<>();
+
+            // input list to set
+            tempUsers.forEach(users::add);
+
+            new Thread(() -> {
+
+            }).start();
         } catch (Exception e) {
-            e.printStackTrace();
+            // System.out.println("\033\143");
+            System.out.println("terjadi kesalahan saat memproses file \"" + fileCsv.getOriginalFilename() + "\"");
         }
         return "redirect:/";
     }

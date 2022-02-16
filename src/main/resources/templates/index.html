@@ -65,7 +65,7 @@
         <div class="text-center">with OpenCSV</div>
         <hr class="line">
         <div class="text-center">
-            <form th:action="@{/upload/csv}" method="post">
+            <form th:action="@{/upload/csv}" method="post" enctype="multipart/form-data">
                 <input type="file" name="file" id="file" required placeholder="Pilih file csv">
                 <button type="submit">Upload</button>
             </form>

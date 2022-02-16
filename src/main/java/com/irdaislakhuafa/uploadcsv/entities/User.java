@@ -11,8 +11,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.irdaislakhuafa.uploadcsv.entities.utils.GenderConverter;
 import com.irdaislakhuafa.uploadcsv.entities.utils.GenderUtils;
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,10 +49,22 @@ public class User {
     @CsvBindByName(column = "kota")
     private String city;
 
-    @Enumerated(value = EnumType.STRING)
-    @NotNull
-    @Min(value = 1, message = "minimal value is 1 character")
+    // @Enumerated(value = EnumType.STRING)
+    @NotNull(message = "gender cannot be null")
     @Column(length = 10, nullable = false)
-    @CsvBindByName(column = "jk")
+    @CsvCustomBindByName(column = "jk", converter = GenderConverter.class)
     private GenderUtils gender;
+
+    // my custom constructor
+    public User(
+            @NotNull(message = "name cannot be null!") String name,
+            @Email(message = "email format not valid!") @NotNull(message = "email cannot be null!") String email,
+            @NotNull(message = "city cannot be null") String city,
+            @NotNull(message = "gender cannot be null") GenderUtils gender) {
+        this.name = name;
+        this.email = email;
+        this.city = city;
+        this.gender = gender;
+    }
+
 }
