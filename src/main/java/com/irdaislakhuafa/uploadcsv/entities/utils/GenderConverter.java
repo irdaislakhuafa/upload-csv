@@ -8,11 +8,9 @@ public class GenderConverter extends AbstractBeanField {
 
     @Override
     protected Object convert(String value) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
-        if (value.equalsIgnoreCase("l") || value.equalsIgnoreCase("p")) {
-            return GenderUtils.valueOf(value.toUpperCase());
-        } else {
-            return GenderUtils.U;
-        }
+        return (value.equalsIgnoreCase("l") ? GenderUtils.L
+                : (value.equalsIgnoreCase("p") ? GenderUtils.P
+                        : GenderUtils.U));
     }
 
 }
